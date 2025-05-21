@@ -164,4 +164,24 @@ class PacienteController extends Controller
 
         return back()->with('error', 'Erro ao importar dados da API.');
     }
+
+    public function receberDados(Request $request)
+    {
+        $dados = $request->input('pacientes');
+        if (!$dados || !is_array($dados)) {
+            return response()->json(['error' => 'Dados inválidos'], 400);
+        }
+
+        foreach ($dados as $p) {
+            Paciente::updateOrCreate(
+                ['cpf' => $p['documento']],
+                [
+                    'nome' => $p['nome_completo'],
+                    'email' => $p['contato'],
+                    'idade' => $p['idade'],
+                ]
+            );
+        }
+        return response()->json(['success' => true]);
+    }
 }
