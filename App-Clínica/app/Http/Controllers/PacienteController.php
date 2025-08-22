@@ -184,4 +184,17 @@ class PacienteController extends Controller
         }
         return response()->json(['success' => true]);
     }
+
+    public function fornecerJson()
+    {
+        $pacientes = Paciente::all()->map(function($p) {
+            return [
+                'nome_completo' => $p->nome,
+                'documento' => $p->cpf,
+                'contato' => $p->email,
+                'idade' => $p->idade,
+            ];
+        });
+        return response()->json(['pacientes' => $pacientes]);
+    }
 }
